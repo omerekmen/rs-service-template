@@ -1,0 +1,45 @@
+{
+    "name": "Rust Backend DevContainer",
+    "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22"
+        },
+        "ghcr.io/devcontainers/features/rust:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/itsmechlark/features/rabbitmq-server:1": {},
+        "ghcr.io/itsmechlark/features/redis-server:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {},
+            "extensions": [
+                "Anthropic.claude-code",
+                "GitHub.codespaces",
+                "GitHub.remotehub",
+                "ms-vscode-remote.remote-containers",
+                "GitHub.copilot",
+                "GitHub.copilot-chat",
+                "GitHub.vscode-pull-request-github",
+                "github.vscode-github-actions",
+                "ms-azuretools.vscode-docker",
+                "docker.docker",
+                "EditorConfig.EditorConfig",
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "cweijan.vscode-redis-client",
+                "Redis.redis-for-vscode",
+                "humao.rest-client",
+                "rust-lang.rust-analyzer",
+                "svelte.svelte-vscode",
+                "bradlc.vscode-tailwindcss",
+                "redhat.vscode-yaml",
+                "inlang.vs-code-extension",
+                "Postman.postman-for-vscode",
+                "ms-vscode.makefile-tools",
+                "ms-kubernetes-tools.vscode-kubernetes-tools"
+            ]
+        }
+    },
+    "postCreateCommand": "npm install -g @anthropic-ai/claude-code && rustup update && cargo --version"
+}

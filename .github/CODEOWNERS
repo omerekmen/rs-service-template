@@ -1,0 +1,25 @@
+# Global code owners
+* @omerekmen
+
+# Rust source code
+/src/ @omerekmen
+/Cargo.toml @omerekmen
+/Cargo.lock @omerekmen
+
+# Configuration files
+/.devcontainer/ @omerekmen
+/.github/ @omerekmen
+/docker/ @omerekmen
+/Dockerfile @omerekmen
+/docker-compose.yml @omerekmen
+
+# Documentation
+/README.md @omerekmen
+/docs/ @omerekmen
+
+# CI/CD and workflows
+/.github/workflows/ @omerekmen
+
+# Environment and config files
+/.env* @omerekmen
+/config/ @omerekmen
