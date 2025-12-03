@@ -1,5 +1,5 @@
 [package]
-name = "application"
+name = "grpc"
 version.workspace = true
 edition.workspace = true
 authors.workspace = true

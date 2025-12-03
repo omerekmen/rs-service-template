@@ -1,17 +1,14 @@
-pub mod db {
-    #[cfg(feature = "db-pg")]
-    pub mod pg {
-        // sqlx Postgres impl placeholder
-    }
-    #[cfg(feature = "db-mssql")]
-    pub mod mssql {
-        // sqlx mssql or tiberius impl placeholder
-    }
+pub fn add(left: u64, right: u64) -> u64 {
+    left + right
 }
 
-pub mod mq {
-    #[cfg(feature = "mq-rabbitmq")]
-    pub mod rabbitmq {
-        // lapin adapter placeholder
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn it_works() {
+        let result = add(2, 2);
+        assert_eq!(result, 4);
     }
 }

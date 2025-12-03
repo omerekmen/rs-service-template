@@ -1,16 +1,8 @@
 [package]
 name = "shared"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 [dependencies]
-thiserror = { workspace = true }
-serde = { workspace = true }
-serde_json = { workspace = true }
-tracing = { workspace = true }
-tracing-subscriber = { workspace = true }
-uuid = { workspace = true }
-ulid = { workspace = true }
-time = { workspace = true }
-config = { workspace = true }
-tracing-actix-web = "0.7.19"
+config = "0.15.19"
+num_cpus = "1.17.0"

@@ -1,24 +1,6 @@
 [package]
 name = "infrastructure"
 version = "0.1.0"
-edition = "2021"
-
-[features]
-default = ["db-mssql", "mq-rabbitmq"]
-# Database backends
-"db-mssql" = ["dep:sqlx", "dep:tiberius"]
-"db-pg" = ["dep:sqlx"]
-# MQ
-"mq-rabbitmq" = ["dep:lapin"]
+edition = "2024"
 
 [dependencies]
-shared = { path = "../shared" }
-application = { path = "../application" }
-sqlx = { workspace = true, optional = true, features = ["runtime-tokio"] }
-tiberius = { workspace = true, optional = true }
-lapin = { workspace = true, optional = true }
-redis = { workspace = true }
-tracing = { workspace = true }
-serde = { workspace = true }
-thiserror = { workspace = true }
-anyhow = { workspace = true }
