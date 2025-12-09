@@ -21,7 +21,14 @@ pub struct Server {
 
 impl Server {
     pub async fn new(config: &shared::AppConfig) -> Result<Self, Box<dyn std::error::Error>> {
-        let app_state = AppState::new().load(config).await?;
+        let mut app_state: AppState = AppState::new();
+        let app_state: AppState = match app_state.load(config).await {
+            Ok(state) => state,
+            Err(e) => {
+                tracing::error!("Failed to load application state: {}! Continuing with default state.", e);
+                AppState::new()
+            }
+        };
         let state: web::Data<AppState> = web::Data::new(app_state);
 
         let origins: Vec<String> = vec!["*".to_string()];

@@ -25,7 +25,6 @@ async fn main() -> std::io::Result<()> {
 
     let http_result: std::io::Result<()> = http_server.run().await
         .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, format!("HTTP server error: {}", e)));
-
         
     tracing::info!("Server shutdown complete");
     http_result

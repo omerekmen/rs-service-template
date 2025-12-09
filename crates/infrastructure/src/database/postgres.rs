@@ -38,7 +38,7 @@ pub async fn create_postgres_pool(config: DatabaseConfig) -> Result<PgPool, sqlx
 
     if config.run_migrations {
         tracing::info!("Running database migrations...");
-        if let Err(e) = sqlx::migrate!("../../migrations").run(&pool).await {
+        if let Err(e) = sqlx::migrate!("./migrations").run(&pool).await {
             tracing::error!("Migration error: {}", e);
             return Err(e.into());
         }

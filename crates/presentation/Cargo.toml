@@ -9,6 +9,7 @@ serde_json = { workspace = true }
 actix-web = { workspace = true }
 sqlx = { workspace = true }
 deadpool-redis = { workspace = true }
+tracing = { workspace = true }
 
 shared = { workspace = true }
 infrastructure = { workspace = true }
