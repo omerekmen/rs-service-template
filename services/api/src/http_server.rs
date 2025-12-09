@@ -88,14 +88,17 @@ impl Server {
     }
 
 
+    #[allow(dead_code)]
     pub fn set_origins(&mut self, origins: Vec<&str>) {
         self.origins = origins.into_iter().map(|s| s.to_string()).collect();
     }
 
+    #[allow(dead_code)]
     pub fn set_headers(&mut self, headers: Vec<header::HeaderName>){
         self.headers = headers;
     }
 
+    #[allow(dead_code)]
     pub fn set_methods(&mut self, methods: Vec<Method>){
         self.methods = methods;
     }
