@@ -1,4 +1,4 @@
-/// Default cache configuration values
+//! Default cache configuration values
 
 pub const DEFAULT_CACHE_SYSTEM: &str = "redis";
 pub const DEFAULT_CACHE_URL: &str = "redis://localhost:6379";

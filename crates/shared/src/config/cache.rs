@@ -26,7 +26,7 @@ impl Default for CacheConfig {
             max_lifetime_seconds: cache::DEFAULT_CACHE_MAX_LIFETIME_SECONDS,
         }
     }
-}   
+}
 
 impl CacheConfig {
     /// Load configuration from environment variables and config files
@@ -37,7 +37,10 @@ impl CacheConfig {
             .set_default("cache.pool_size", default.pool_size as i64)?
             .set_default("cache.min_connections", default.min_connections)?
             .set_default("cache.max_connections", default.max_connections)?
-            .set_default("cache.connection_timeout_seconds", default.connection_timeout_seconds)?
+            .set_default(
+                "cache.connection_timeout_seconds",
+                default.connection_timeout_seconds,
+            )?
             .set_default("cache.idle_timeout_seconds", default.idle_timeout_seconds)?
             .set_default("cache.max_lifetime_seconds", default.max_lifetime_seconds)?;
 

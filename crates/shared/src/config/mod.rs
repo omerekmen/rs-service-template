@@ -1,19 +1,19 @@
 pub mod app;
-pub mod server;
-pub mod database;
 pub mod cache;
-pub mod event_publisher;
-pub mod jwt;
-pub mod oauth;
+pub mod database;
 pub mod email;
-pub mod security;
-pub mod logging;
+pub mod event_publisher;
 pub mod features;
+pub mod jwt;
+pub mod logging;
+pub mod oauth;
+pub mod security;
+pub mod server;
 
 pub use app::AppConfig;
-pub use server::ServerConfig;
-pub use database::DatabaseConfig;
 pub use cache::CacheConfig;
+pub use database::DatabaseConfig;
+pub use server::ServerConfig;
 // pub use event_publisher::EventPublisherConfig;
 // pub use jwt::JwtConfig;
 // pub use oauth::{OAuthConfig, OAuthProviderConfig};

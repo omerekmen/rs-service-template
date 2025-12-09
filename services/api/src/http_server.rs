@@ -1,10 +1,9 @@
 use actix_cors::Cors;
 use actix_web::{
-    web,
-    http::{header, Method},
+    App, HttpServer,
+    http::{Method, header},
     middleware::{Compress, Logger},
-    App,
-    HttpServer,
+    web,
 };
 
 use crate::route_configuration::configure_routes;
@@ -16,7 +15,7 @@ pub struct Server {
     state: web::Data<AppState>,
     origins: Vec<String>,
     headers: Vec<header::HeaderName>,
-    methods: Vec<Method>
+    methods: Vec<Method>,
 }
 
 impl Server {
@@ -25,7 +24,10 @@ impl Server {
         let app_state: AppState = match app_state.load(config).await {
             Ok(state) => state,
             Err(e) => {
-                tracing::error!("Failed to load application state: {}! Continuing with default state.", e);
+                tracing::error!(
+                    "Failed to load application state: {}! Continuing with default state.",
+                    e
+                );
                 AppState::new()
             }
         };
@@ -55,10 +57,10 @@ impl Server {
             methods,
         })
     }
-    
+
     pub async fn run(self) -> Result<(), actix_web::Error> {
         let bind_address = format!("{}:{}", self.host, self.port);
-        
+
         let headers = self.headers.clone();
         let methods = self.methods.clone();
         let origins = self.origins.clone();
@@ -88,12 +90,11 @@ impl Server {
                 .wrap(cors)
                 .configure(configure_routes)
         })
-            .bind(bind_address)?
-            .run()
-            .await
-            .map_err(actix_web::Error::from)
+        .bind(bind_address)?
+        .run()
+        .await
+        .map_err(actix_web::Error::from)
     }
-
 
     #[allow(dead_code)]
     pub fn set_origins(&mut self, origins: Vec<&str>) {
@@ -101,13 +102,12 @@ impl Server {
     }
 
     #[allow(dead_code)]
-    pub fn set_headers(&mut self, headers: Vec<header::HeaderName>){
+    pub fn set_headers(&mut self, headers: Vec<header::HeaderName>) {
         self.headers = headers;
     }
 
     #[allow(dead_code)]
-    pub fn set_methods(&mut self, methods: Vec<Method>){
+    pub fn set_methods(&mut self, methods: Vec<Method>) {
         self.methods = methods;
     }
-
-}   
+}

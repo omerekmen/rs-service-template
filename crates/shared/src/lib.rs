@@ -3,7 +3,6 @@ pub use config::AppConfig;
 
 pub mod defaults;
 pub use defaults::{
-    server,
     database,
     // cache,
     // event_publisher,
@@ -13,4 +12,5 @@ pub use defaults::{
     // security,
     // logging,
     // features,
+    server,
 };

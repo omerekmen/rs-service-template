@@ -37,12 +37,24 @@ impl DatabaseConfig {
         let default: DatabaseConfig = Self::default();
         let builder = config::Config::builder()
             .set_default("database.database_system", default.database_system.clone())?
-            .set_default("database.connection_string", default.connection_string.clone())?
+            .set_default(
+                "database.connection_string",
+                default.connection_string.clone(),
+            )?
             .set_default("database.min_connections", default.min_connections)?
             .set_default("database.max_connections", default.max_connections)?
-            .set_default("database.connection_timeout_seconds", default.connection_timeout_seconds)?
-            .set_default("database.idle_timeout_seconds", default.idle_timeout_seconds)?
-            .set_default("database.max_lifetime_seconds", default.max_lifetime_seconds)?
+            .set_default(
+                "database.connection_timeout_seconds",
+                default.connection_timeout_seconds,
+            )?
+            .set_default(
+                "database.idle_timeout_seconds",
+                default.idle_timeout_seconds,
+            )?
+            .set_default(
+                "database.max_lifetime_seconds",
+                default.max_lifetime_seconds,
+            )?
             .set_default("database.enable_logging", default.enable_logging)?
             .set_default("database.run_migrations", default.run_migrations)?;
 
@@ -50,7 +62,7 @@ impl DatabaseConfig {
             .add_source(config::File::with_name(&format!("config/{}", env)).required(false))
             .add_source(config::Environment::with_prefix("APP__DATABASE").separator("__"))
             .build()?;
- 
+
         config
             .get::<DatabaseConfig>("database")
             .or_else(|_| config.try_deserialize())

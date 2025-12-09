@@ -1,4 +1,4 @@
-/// Server default configurations
+//! Server default configurations
 
 pub const DEFAULT_HOST: &str = "0.0.0.0";
 pub const DEFAULT_PORT: u16 = 8080;

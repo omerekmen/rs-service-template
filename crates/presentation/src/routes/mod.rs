@@ -1,3 +1,3 @@
 pub mod health;
-pub mod user;
 pub mod tenant;
+pub mod user;

@@ -1,5 +1,5 @@
+use sqlx::PgPool;
 use std::collections::HashMap;
-use sqlx::{ PgPool };
 
 #[derive(Clone, Default)]
 pub struct DatabaseState {

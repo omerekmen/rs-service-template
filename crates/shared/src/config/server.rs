@@ -1,4 +1,4 @@
-use serde::{Deserialize};
+use serde::Deserialize;
 
 use crate::defaults::server::*;
 
@@ -32,7 +32,10 @@ impl ServerConfig {
             .set_default("server.host", default.host.clone())?
             .set_default("server.port", default.port)?
             .set_default("server.workers", default.workers as i64)?
-            .set_default("server.request_timeout_seconds", default.request_timeout_seconds)?
+            .set_default(
+                "server.request_timeout_seconds",
+                default.request_timeout_seconds,
+            )?
             .set_default("server.keep_alive_seconds", default.keep_alive_seconds)?
             .set_default("server.max_connections", default.max_connections as i64)?;
 

@@ -1,9 +1,11 @@
-use serde::{Deserialize};
 use super::{
-    ServerConfig, DatabaseConfig, CacheConfig, 
+    CacheConfig,
     // JwtConfig, OAuthConfig, EmailConfig,
     // SecurityConfig, LoggingConfig, FeatureFlags, EventPublisherConfig
+    DatabaseConfig,
+    ServerConfig,
 };
+use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize, Default)]
 pub struct AppConfig {
@@ -21,11 +23,10 @@ pub struct AppConfig {
 
 impl AppConfig {
     pub fn load(env: &str) -> Result<Self, Box<dyn std::error::Error>> {
-        
         Ok(AppConfig {
-            server: ServerConfig::load(&env)?,
-            database: DatabaseConfig::load(&env)?,
-            cache: CacheConfig::load(&env)?,
+            server: ServerConfig::load(env)?,
+            database: DatabaseConfig::load(env)?,
+            cache: CacheConfig::load(env)?,
             // event_publisher: EventPublisherConfig::load(&env)?,
             // jwt: JwtConfig::load(&env)?,
             // oauth: OAuthConfig::default(),

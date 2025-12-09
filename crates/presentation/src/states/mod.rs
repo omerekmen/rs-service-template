@@ -1,19 +1,11 @@
-mod database;
 mod cache;
-mod jwt;
+mod database;
 mod email;
+mod jwt;
 
-use crate::states::{
-    database::DatabaseState,
-    cache::CacheState,
-    jwt::JwtState,
-    email::EmailState,
-};
+use crate::states::{cache::CacheState, database::DatabaseState, email::EmailState, jwt::JwtState};
 
-use infrastructure::{
-    database::postgres::create_postgres_pool,
-    cache::redis::create_redis_pool,
-};
+use infrastructure::{cache::redis::create_redis_pool, database::postgres::create_postgres_pool};
 
 /// Application state shared across all handlers
 #[derive(Clone, Default)]
@@ -29,7 +21,10 @@ impl AppState {
         Self::default()
     }
 
-    pub async fn load(&mut self, conf: &shared::AppConfig) -> Result<Self, Box<dyn std::error::Error>> {
+    pub async fn load(
+        &mut self,
+        conf: &shared::AppConfig,
+    ) -> Result<Self, Box<dyn std::error::Error>> {
         // Load database configurations
         let db_pool = create_postgres_pool(conf.database.clone()).await?;
         self.db.add_db_pool("default".to_string(), db_pool);
@@ -37,8 +32,6 @@ impl AppState {
         // Load cache configurations
         let cache = create_redis_pool(conf.cache.clone()).await?;
         self.cache.add_cache("default".to_string(), cache);
-        
-
 
         Ok(self.clone())
     }

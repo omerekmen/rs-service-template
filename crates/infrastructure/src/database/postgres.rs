@@ -1,7 +1,7 @@
 use core::time;
 
-use sqlx::{postgres::PgPoolOptions, PgPool};
-use shared::config::{database::DatabaseConfig};
+use shared::config::database::DatabaseConfig;
+use sqlx::{PgPool, postgres::PgPoolOptions};
 
 pub async fn create_postgres_pool(config: DatabaseConfig) -> Result<PgPool, sqlx::Error> {
     let pool = PgPoolOptions::new()
@@ -26,7 +26,8 @@ pub async fn create_postgres_pool(config: DatabaseConfig) -> Result<PgPool, sqlx
         Ok(pool) => {
             tracing::info!(
                 "PostgreSQL pool established (min={}, max={}).",
-                config.min_connections, config.max_connections
+                config.min_connections,
+                config.max_connections
             );
             pool
         }

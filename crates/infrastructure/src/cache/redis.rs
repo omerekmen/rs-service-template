@@ -1,5 +1,5 @@
-use deadpool_redis::{Config, Pool, Runtime, CreatePoolError};
-use shared::config::{cache::CacheConfig};
+use deadpool_redis::{Config, CreatePoolError, Pool, Runtime};
+use shared::config::cache::CacheConfig;
 
 pub async fn create_redis_pool(config: CacheConfig) -> Result<Pool, CreatePoolError> {
     let cfg = Config::from_url(config.url.clone());

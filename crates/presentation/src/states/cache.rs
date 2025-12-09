@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use deadpool_redis::{Pool};
+use deadpool_redis::Pool;
 
 #[derive(Clone, Default)]
 pub struct CacheState {
