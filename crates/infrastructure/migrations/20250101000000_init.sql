@@ -1,0 +1,2 @@
+-- This is an initial placeholder migration required by SQLx.
+-- You can delete or modify it when you add real migrations.
