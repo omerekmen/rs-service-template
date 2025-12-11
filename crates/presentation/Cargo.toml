@@ -12,4 +12,7 @@ deadpool-redis = { workspace = true }
 tracing = { workspace = true }
 
 shared = { workspace = true }
+domain = { path = "../domain" }
+application = { path = "../application" }
 infrastructure = { workspace = true }
+uuid = { version = "1.11.0", features = ["v4", "serde"] }

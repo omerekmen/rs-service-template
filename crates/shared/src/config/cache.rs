@@ -46,11 +46,13 @@ impl CacheConfig {
 
         let config = builder
             .add_source(config::File::with_name(&format!("config/{}", env)).required(false))
-            .add_source(config::Environment::with_prefix("APP__CACHE").separator("__"))
+            .add_source(
+                config::Environment::with_prefix("APP")
+                    .prefix_separator("__")
+                    .separator("__")
+            )
             .build()?;
 
-        config
-            .get::<CacheConfig>("cache")
-            .or_else(|_| config.try_deserialize())
+        config.get::<CacheConfig>("cache")
     }
 }

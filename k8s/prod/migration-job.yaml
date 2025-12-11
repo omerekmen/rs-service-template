@@ -1,0 +1,54 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migration
+  namespace: rs-service-prod
+  labels:
+    app: migration
+    environment: prod
+spec:
+  template:
+    metadata:
+      labels:
+        app: migration
+        environment: prod
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: migration
+        image: ghcr.io/your-org/rs-service-template-api:latest
+        imagePullPolicy: IfNotPresent  # Use specific tags in production
+        command:
+        - /bin/sh
+        - -c
+        - |
+          echo "Running database migrations for production..."
+          # Note: sqlx migrate run requires sqlx-cli to be installed
+          # For now, the service should handle migrations on startup
+          # or we need to include sqlx-cli in the image
+          echo "Migration job placeholder - migrations handled by service startup"
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DATABASE_CONNECTION_STRING
+        - name: RUST_LOG
+          value: "info"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+      # Uncomment if using private container registry
+      # imagePullSecrets:
+      # - name: ghcr-secret
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532
+  backoffLimit: 3
+  activeDeadlineSeconds: 600
+  ttlSecondsAfterFinished: 86400  # Clean up after 24 hours

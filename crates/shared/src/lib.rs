@@ -14,3 +14,9 @@ pub use defaults::{
     // features,
     server,
 };
+
+pub mod error;
+pub use error::{AppError, AppResult};
+
+pub mod types;
+pub use types::UserId;

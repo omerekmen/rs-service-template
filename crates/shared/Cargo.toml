@@ -9,3 +9,18 @@ serde_json = { workspace = true }
 
 config = "0.15.19"
 num_cpus = "1.17.0"
+
+# Domain types
+uuid = { version = "1.11.0", features = ["v4", "serde"] }
+
+# Error handling
+sqlx = { workspace = true, optional = true }
+deadpool-redis = { workspace = true, optional = true }
+redis = { version = "0.27.6", optional = true }
+actix-web = { workspace = true, optional = true }
+
+[features]
+default = []
+actix-integration = ["actix-web"]
+sqlx-integration = ["sqlx"]
+redis-integration = ["deadpool-redis", "redis"]

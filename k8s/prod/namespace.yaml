@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rs-service-prod
+  labels:
+    name: rs-service-prod
+    environment: prod
+    team: platform
+    managed-by: kubectl

@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: rs-service-prod
+  labels:
+    app: rs-service
+    environment: prod
+data:
+  # Application environment
+  APP_ENV: "prod"
+  RUST_LOG: "warn,actix_web=error"
+
+  # Server configuration
+  APP__SERVER__HOST: "0.0.0.0"
+  APP__SERVER__PORT: "8080"
+  APP__SERVER__WORKERS: "8"
+  APP__SERVER__REQUEST_TIMEOUT_SECONDS: "60"
+  APP__SERVER__KEEP_ALIVE_SECONDS: "75"
+  APP__SERVER__MAX_CONNECTIONS: "25000"
+
+  # Database configuration (non-sensitive)
+  APP__DATABASE__SYSTEM: "postgresql"
+  APP__DATABASE__MAX_CONNECTIONS: "20"
+  APP__DATABASE__MIN_CONNECTIONS: "5"
+  APP__DATABASE__CONNECTION_TIMEOUT_SECONDS: "30"
+  APP__DATABASE__IDLE_TIMEOUT_SECONDS: "600"
+  APP__DATABASE__MAX_LIFETIME_SECONDS: "1800"
+  APP__DATABASE__ENABLE_LOGGING: "false"
+  APP__DATABASE__RUN_MIGRATIONS: "false"  # Migrations handled by Job
+
+  # Cache configuration (non-sensitive)
+  APP__CACHE__MAX_CONNECTIONS: "10"
+  APP__CACHE__MIN_CONNECTIONS: "2"
+  APP__CACHE__CONNECTION_TIMEOUT_SECONDS: "10"
+  APP__CACHE__IDLE_TIMEOUT_SECONDS: "300"
+  APP__CACHE__MAX_LIFETIME_SECONDS: "1800"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prod-toml-config
+  namespace: rs-service-prod
+  labels:
+    app: rs-service
+    environment: prod
+data:
+  prod.toml: |
+    [server]
+    host = "0.0.0.0"
+    port = 8080
+    workers = 8
+    request_timeout_seconds = 60
+    keep_alive_seconds = 75
+    max_connections = 25000
+
+    [database]
+    system = "postgresql"
+    max_connections = 20
+    min_connections = 5
+    connection_timeout_seconds = 30
+    idle_timeout_seconds = 600
+    max_lifetime_seconds = 1800
+    enable_logging = false
+    run_migrations = false
+
+    [cache]
+    max_connections = 10
+    min_connections = 2
+    connection_timeout_seconds = 10
+    idle_timeout_seconds = 300
+    max_lifetime_seconds = 1800

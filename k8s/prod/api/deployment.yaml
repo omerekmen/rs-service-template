@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: rs-service-prod
+  labels:
+    app: api
+    environment: prod
+    version: v1
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: api
+      environment: prod
+  template:
+    metadata:
+      labels:
+        app: api
+        environment: prod
+        version: v1
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/your-org/rs-service-template-api:latest
+        imagePullPolicy: IfNotPresent  # Use specific tags in production
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        # Environment from ConfigMap
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: RUST_LOG
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: RUST_LOG
+        # Sensitive configuration from Secrets
+        - name: APP__DATABASE__CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DATABASE_CONNECTION_STRING
+        - name: APP__CACHE__URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: CACHE_URL
+        # Load all other configs from ConfigMap
+        envFrom:
+        - configMapRef:
+            name: app-config
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "2"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 15
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: prod-toml-config
+      # Uncomment if using private container registry
+      # imagePullSecrets:
+      # - name: ghcr-secret
+      restartPolicy: Always
+      # Production-grade settings
+      terminationGracePeriodSeconds: 60
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        fsGroup: 65532

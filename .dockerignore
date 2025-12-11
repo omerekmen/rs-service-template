@@ -1,0 +1,120 @@
+# Build artifacts (can be GBs in size)
+target/
+**/target/
+*.swp
+*.swo
+*~
+*.bak
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+
+# IDE and editors
+.vscode/
+.idea/
+*.iml
+.DS_Store
+*.swp
+*.swo
+.vim/
+.nvim/
+.helix/
+
+# Documentation (not needed in runtime)
+*.md
+!README.md
+docs/
+STRUCTURE.md
+LICENSE
+CONTRIBUTING.md
+
+# CI/CD configurations
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+azure-pipelines.yml
+
+# Environment files (may contain secrets)
+.env
+.env.*
+*.env
+.env.local
+.env.development
+.env.test
+.env.production
+*.local
+
+# Kubernetes and deployment manifests
+k8s/
+deploy/
+kubernetes/
+helm/
+charts/
+
+# Docker files (not needed inside the image)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Scripts (copy explicitly if needed)
+scripts/
+*.sh
+
+# Test data and fixtures
+test_data/
+fixtures/
+tmp/
+temp/
+
+# Development tools
+.devcontainer/
+.claude/
+.cursor/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Rust specific
+**/*.rs.bk
+*.pdb
+Cargo.lock.orig
+
+# IDE and build caches
+.cargo-cache/
+.rust-analyzer/
+.cache/
+
+# Coverage reports
+coverage/
+*.profraw
+*.profdata
+
+# Backup files
+*.backup
+*~
+
+# Python (if using for scripts)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+
+# Node (if using for frontend tools)
+node_modules/
+package-lock.json
+yarn.lock

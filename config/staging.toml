@@ -1,0 +1,34 @@
+# Staging Environment Configuration
+# This file provides default values for staging/pre-production environment
+# Connection strings and secrets should be provided via environment variables
+
+[server]
+host = "0.0.0.0"
+port = 8080
+workers = 4  # More workers for staging
+request_timeout_seconds = 60
+keep_alive_seconds = 75
+max_connections = 10000  # Higher limit for staging
+
+[database]
+system = "postgresql"
+# Connection string MUST be provided via environment variable:
+# APP__DATABASE__CONNECTION_STRING
+connection_string = ""  # Override via env var
+max_connections = 20
+min_connections = 5
+connection_timeout_seconds = 30
+idle_timeout_seconds = 600
+max_lifetime_seconds = 1800
+enable_logging = false  # Disable query logging in staging for performance
+run_migrations = false  # Migrations handled by Kubernetes Job
+
+[cache]
+# Redis URL MUST be provided via environment variable:
+# APP__CACHE__URL
+url = ""  # Override via env var
+max_connections = 10
+min_connections = 2
+connection_timeout_seconds = 10
+idle_timeout_seconds = 300
+max_lifetime_seconds = 1800

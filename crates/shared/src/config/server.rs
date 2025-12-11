@@ -41,11 +41,13 @@ impl ServerConfig {
 
         let config = builder
             .add_source(config::File::with_name(&format!("config/{}", env)).required(false))
-            .add_source(config::Environment::with_prefix("APP__SERVER").separator("__"))
+            .add_source(
+                config::Environment::with_prefix("APP")
+                    .prefix_separator("__")
+                    .separator("__")
+            )
             .build()?;
 
-        config
-            .get::<ServerConfig>("server")
-            .or_else(|_| config.try_deserialize())
+        config.get::<ServerConfig>("server")
     }
 }

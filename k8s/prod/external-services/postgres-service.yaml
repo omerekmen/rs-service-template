@@ -1,0 +1,27 @@
+# External PostgreSQL Service
+# Points to external managed database (AWS RDS, Google Cloud SQL, Azure Database, etc.)
+#
+# Update the externalName to match your production database endpoint
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-service
+  namespace: rs-service-prod
+  labels:
+    app: postgres
+    environment: prod
+    service-type: external
+spec:
+  type: ExternalName
+  # Update this to your production PostgreSQL endpoint
+  # Examples:
+  # - AWS RDS: prod-postgres.xxxxxxxxxxxx.us-east-1.rds.amazonaws.com
+  # - GCP Cloud SQL: xxx.xxx.xxx.xxx (use IP or Cloud SQL Proxy)
+  # - Azure: prod-postgres.postgres.database.azure.com
+  externalName: prod-postgres.xxxxxxxxxxxx.us-east-1.rds.amazonaws.com
+  ports:
+  - port: 5432
+    targetPort: 5432
+    protocol: TCP
+    name: postgres

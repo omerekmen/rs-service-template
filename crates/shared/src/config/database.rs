@@ -60,11 +60,13 @@ impl DatabaseConfig {
 
         let config = builder
             .add_source(config::File::with_name(&format!("config/{}", env)).required(false))
-            .add_source(config::Environment::with_prefix("APP__DATABASE").separator("__"))
+            .add_source(
+                config::Environment::with_prefix("APP")
+                    .prefix_separator("__")
+                    .separator("__")
+            )
             .build()?;
 
-        config
-            .get::<DatabaseConfig>("database")
-            .or_else(|_| config.try_deserialize())
+        config.get::<DatabaseConfig>("database")
     }
 }

@@ -12,8 +12,11 @@ pub async fn create_postgres_pool(config: DatabaseConfig) -> Result<PgPool, sqlx
         .idle_timeout(time::Duration::from_secs(config.idle_timeout_seconds))
         .after_connect(|conn, _meta| {
             Box::pin(async move {
-                sqlx::query("SET application_name = ($1)")
-                    .bind(env!("CARGO_PKG_NAME"))
+                // PostgreSQL doesn't support parameterized SET commands
+                // Use format! to create the query string
+                let app_name = env!("CARGO_PKG_NAME");
+                let query = format!("SET application_name = '{}'", app_name);
+                sqlx::query(&query)
                     .execute(&mut *conn)
                     .await?;
                 Ok(())

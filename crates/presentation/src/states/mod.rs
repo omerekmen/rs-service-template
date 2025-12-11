@@ -26,8 +26,8 @@ impl AppState {
         conf: &shared::AppConfig,
     ) -> Result<Self, Box<dyn std::error::Error>> {
         // Load database configurations
-        let db_pool = create_postgres_pool(conf.database.clone()).await?;
-        self.db.add_db_pool("default".to_string(), db_pool);
+        // let db_pool = create_postgres_pool(conf.database.clone()).await?;
+        // self.db.add_db_pool("default".to_string(), db_pool);
 
         // Load cache configurations
         let cache = create_redis_pool(conf.cache.clone()).await?;

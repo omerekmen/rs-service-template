@@ -1,0 +1,128 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: rs-service-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: rs_service_dev
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: Mount migrations for automatic initialization
+      # - ./crates/infrastructure/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: rs-service-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # API Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        SERVICE_NAME: api
+    container_name: rs-service-api
+    environment:
+      # Application environment
+      APP_ENV: dev
+      RUST_LOG: debug,actix_web=info,sqlx=info
+
+      # Server configuration
+      APP__SERVER__HOST: 0.0.0.0
+      APP__SERVER__PORT: 8080
+      APP__SERVER__WORKERS: 2
+
+      # Database configuration
+      APP__DATABASE__CONNECTION_STRING: postgresql://postgres:postgres@postgres:5432/rs_service_dev
+      APP__DATABASE__MAX_CONNECTIONS: 10
+      APP__DATABASE__MIN_CONNECTIONS: 2
+      APP__DATABASE__RUN_MIGRATIONS: "true"
+      APP__DATABASE__ENABLE_LOGGING: "true"
+
+      # Cache configuration
+      APP__CACHE__URL: redis://redis:6379
+      APP__CACHE__MAX_CONNECTIONS: 5
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - app-network
+    restart: unless-stopped
+    # Optional: Mount source code for development (requires cargo-watch)
+    # volumes:
+    #   - ./:/app
+    #   - cargo-cache:/usr/local/cargo/registry
+
+  # Worker Service (uncomment when implemented)
+  # worker:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     args:
+  #       SERVICE_NAME: worker
+  #   container_name: rs-service-worker
+  #   environment:
+  #     APP_ENV: dev
+  #     RUST_LOG: debug
+  #     APP__DATABASE__CONNECTION_STRING: postgresql://postgres:postgres@postgres:5432/rs_service_dev
+  #     APP__CACHE__URL: redis://redis:6379
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   networks:
+  #     - app-network
+  #   restart: unless-stopped
+
+volumes:
+  # Persistent volume for PostgreSQL data
+  postgres_data:
+    driver: local
+
+  # Persistent volume for Redis data
+  redis_data:
+    driver: local
+
+  # Optional: Cargo cache for faster rebuilds
+  # cargo-cache:
+  #   driver: local
+
+networks:
+  # Isolated network for service communication
+  app-network:
+    driver: bridge
+    name: rs-service-network

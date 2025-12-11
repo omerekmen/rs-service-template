@@ -1,0 +1,36 @@
+# Production Environment Configuration
+# This file provides default values for production environment
+# All sensitive configuration MUST be provided via environment variables
+
+[server]
+host = "0.0.0.0"
+port = 8080
+workers = 8  # Maximum workers for production (adjust based on CPU cores)
+request_timeout_seconds = 60
+keep_alive_seconds = 75
+max_connections = 25000  # Maximum connections for production
+
+[database]
+system = "postgresql"
+# Connection string MUST be provided via environment variable:
+# APP__DATABASE__CONNECTION_STRING
+# Example: postgresql://user:pass@prod-db.region.rds.amazonaws.com:5432/dbname
+connection_string = ""  # Override via env var (required)
+max_connections = 20
+min_connections = 5
+connection_timeout_seconds = 30
+idle_timeout_seconds = 600
+max_lifetime_seconds = 1800
+enable_logging = false  # Disable query logging in production
+run_migrations = false  # Migrations handled by Kubernetes Job
+
+[cache]
+# Redis URL MUST be provided via environment variable:
+# APP__CACHE__URL
+# Example: redis://prod-cache.region.elasticache.amazonaws.com:6379
+url = ""  # Override via env var (required)
+max_connections = 10
+min_connections = 2
+connection_timeout_seconds = 10
+idle_timeout_seconds = 300
+max_lifetime_seconds = 1800

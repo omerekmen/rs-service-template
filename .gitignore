@@ -50,3 +50,33 @@ Cargo.lock
 /src/proto/*.h
 /src/proto/*.cc
 /src/proto/*.o
+# Kubernetes secrets (NEVER commit!)
+k8s/**/secrets.yaml
+k8s/**/sealed-secrets.yaml
+k8s/**/*-secret.yaml
+
+# Docker Compose overrides
+docker-compose.override.yml
+
+# Kubeconfig files
+kubeconfig
+*.kubeconfig
+.kube/
+
+# Docker build artifacts
+.docker/
+
+# Backup files
+*.backup
+*.bak
+*~
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cloud provider configs
+.aws/
+.gcp/
+.azure/

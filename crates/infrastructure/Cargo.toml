@@ -5,12 +5,11 @@ edition = "2024"
 
 [dependencies]
 shared = { workspace = true }
+domain = { path = "../domain" }
 tracing = { workspace = true }
 
-sqlx = { workspace = true, features = [
-    "runtime-tokio-rustls",
-    "postgres",
-    "uuid",
-    "chrono",
-] }
+sqlx = { workspace = true }
 deadpool-redis = { workspace = true }
+async-trait = "0.1"
+chrono = "0.4"
+uuid = { version = "1.11.0", features = ["v4", "serde"] }

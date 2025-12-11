@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: rs-service-dev
+  labels:
+    app: api
+    environment: dev
+    version: v1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: api
+      environment: dev
+  template:
+    metadata:
+      labels:
+        app: api
+        environment: dev
+        version: v1
+    spec:
+      containers:
+      - name: api
+        image: ghcr.io/your-org/rs-service-template-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        # Environment from ConfigMap
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: RUST_LOG
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: RUST_LOG
+        # Sensitive configuration from Secrets
+        - name: APP__DATABASE__CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: DATABASE_CONNECTION_STRING
+        - name: APP__CACHE__URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secrets
+              key: CACHE_URL
+        # Load all other configs from ConfigMap
+        envFrom:
+        - configMapRef:
+            name: app-config
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+          successThreshold: 1
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+          successThreshold: 1
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: dev-toml-config
+      # Uncomment if using private container registry
+      # imagePullSecrets:
+      # - name: ghcr-secret
+      restartPolicy: Always

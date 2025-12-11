@@ -1,0 +1,35 @@
+# Development Environment Configuration
+# This file provides default values for local development
+# Environment variables with APP__ prefix can override these values
+
+[server]
+host = "0.0.0.0"
+port = 8080
+workers = 2  # Lower worker count for dev
+request_timeout_seconds = 60
+keep_alive_seconds = 75
+max_connections = 1000  # Lower limit for dev
+
+[database]
+database_system = "postgresql"
+# Default connection for local development
+# Override with: APP__DATABASE__CONNECTION_STRING
+connection_string = "postgresql://postgres:postgres@localhost:5432/rs_service_dev"
+max_connections = 10
+min_connections = 2
+connection_timeout_seconds = 30
+idle_timeout_seconds = 600
+max_lifetime_seconds = 1800
+enable_logging = true  # Enable SQL query logging in dev
+run_migrations = true  # Auto-run migrations on startup
+
+[cache]
+# Default Redis connection for local development
+# Override with: APP__CACHE__URL
+url = "redis://localhost:6379"
+pool_size = 10
+max_connections = 5
+min_connections = 1
+connection_timeout_seconds = 10
+idle_timeout_seconds = 300
+max_lifetime_seconds = 1800

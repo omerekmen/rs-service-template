@@ -1,0 +1,27 @@
+# External Redis Service
+# Points to external managed cache (AWS ElastiCache, Google Memorystore, Azure Cache, etc.)
+#
+# Update the externalName to match your production Redis endpoint
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: rs-service-prod
+  labels:
+    app: redis
+    environment: prod
+    service-type: external
+spec:
+  type: ExternalName
+  # Update this to your production Redis endpoint
+  # Examples:
+  # - AWS ElastiCache: prod-redis.xxxxxx.cache.amazonaws.com
+  # - GCP Memorystore: xxx.xxx.xxx.xxx (use IP)
+  # - Azure Cache: prod-redis.redis.cache.windows.net
+  externalName: prod-redis.xxxxxx.cache.amazonaws.com
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis

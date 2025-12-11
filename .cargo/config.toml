@@ -1,0 +1,46 @@
+[build]
+# Use all available CPU cores for parallel compilation
+jobs = 4
+# NOTE: For Docker builds, specify target explicitly:
+# cargo build --release --target x86_64-unknown-linux-musl
+
+[target.x86_64-unknown-linux-musl]
+# Specify the musl linker (used in Docker builds)
+linker = "x86_64-linux-musl-gcc"
+
+# Optimize release builds for size and performance
+[profile.release]
+# Maximum optimization level
+opt-level = 3
+# Full link-time optimization for maximum performance and size reduction
+lto = "fat"
+# Single codegen unit for maximum optimization (slower build, smaller binary)
+codegen-units = 1
+# Strip debug symbols from binary (~30% size reduction)
+strip = true
+# Use abort instead of unwind on panic (smaller binary size)
+panic = "abort"
+
+# Release profile with debug symbols (for profiling)
+[profile.release-with-debug]
+inherits = "release"
+debug = true
+strip = false
+
+# Development profile optimizations (faster compile times)
+[profile.dev]
+# Faster compilation
+opt-level = 0
+debug = true
+split-debuginfo = "unpacked"
+
+# Network configuration
+[net]
+# Use git CLI for fetching (better compatibility with some git setups)
+git-fetch-with-cli = true
+
+# Cargo settings
+[term]
+verbose = false
+quiet = false
+color = "auto"

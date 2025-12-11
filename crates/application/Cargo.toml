@@ -5,3 +5,12 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+shared = { path = "../shared" }
+domain = { path = "../domain" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+async-trait = "0.1"
+chrono = { version = "0.4", features = ["serde"] }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }

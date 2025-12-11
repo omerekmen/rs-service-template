@@ -5,6 +5,10 @@ use actix_web::{
     middleware::{Compress, Logger},
     web,
 };
+use std::sync::Arc;
+
+use application::UserService;
+use infrastructure::PostgresUserRepository;
 
 use crate::route_configuration::configure_routes;
 use presentation::states::AppState;
@@ -13,6 +17,7 @@ pub struct Server {
     host: String,
     port: u16,
     state: web::Data<AppState>,
+    user_service: web::Data<UserService>,
     origins: Vec<String>,
     headers: Vec<header::HeaderName>,
     methods: Vec<Method>,
@@ -33,6 +38,17 @@ impl Server {
         };
         let state: web::Data<AppState> = web::Data::new(app_state);
 
+        // Create database pool for services
+        let db_pool =
+            infrastructure::database::postgres::create_postgres_pool(config.database.clone())
+                .await?;
+
+        // Create repository implementations
+        let user_repository = Arc::new(PostgresUserRepository::new(db_pool.clone()));
+
+        // Create application services
+        let user_service = web::Data::new(UserService::new(user_repository));
+
         let origins: Vec<String> = vec!["*".to_string()];
         let headers: Vec<header::HeaderName> = vec![
             header::AUTHORIZATION,
@@ -52,6 +68,7 @@ impl Server {
             host: config.server.host.clone(),
             port: config.server.port,
             state,
+            user_service,
             origins,
             headers,
             methods,
@@ -65,6 +82,7 @@ impl Server {
         let methods = self.methods.clone();
         let origins = self.origins.clone();
         let shared_state = self.state.clone();
+        let user_service = self.user_service.clone();
 
         tracing::info!("Starting HTTP server on {}", bind_address);
 
@@ -84,6 +102,7 @@ impl Server {
 
             App::new()
                 .app_data(shared_state.clone())
+                .app_data(user_service.clone())
                 // .wrap(TrackingLogger::default)
                 .wrap(Logger::default())
                 .wrap(Compress::default())
